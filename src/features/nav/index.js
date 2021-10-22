@@ -1,67 +1,63 @@
-import React, { useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import {
-  decrement,
-  increment,
-  incrementByAmount,
-  incrementAsync,
-  incrementIfOdd,
-  selectCount,
-} from "./navSlice";
+import React from "react";
+import { useHistory, NavLink } from "react-router-dom";
+
+import useUserState from "../../hooks/user.hook";
+
+// import { useSelector, useDispatch } from "react-redux";
+// import {
+//   decrement,
+//   increment,
+//   incrementByAmount,
+//   incrementAsync,
+//   incrementIfOdd,
+//   selectCount,
+// } from "./navSlice";
+
 import "./styles.scss";
 
 export default function Nav() {
-  const count = useSelector(selectCount);
-  const dispatch = useDispatch();
-  const [incrementAmount, setIncrementAmount] = useState("2");
+  const history = useHistory();
+  const [user, setUser] = useUserState();
 
-  const incrementValue = Number(incrementAmount) || 0;
+  const logout = () => {
+    setUser(false);
+    // remove user info
+    localStorage.removeItem("user");
+    // redirect to login
+    history.push("/login");
+  };
 
   return (
-    <div>
-      <div className={styles.row}>
-        <button
-          className={styles.button}
-          aria-label="Decrement value"
-          onClick={() => dispatch(decrement())}
-        >
-          -
-        </button>
-        <span className={styles.value}>{count}</span>
-        <button
-          className={styles.button}
-          aria-label="Increment value"
-          onClick={() => dispatch(increment())}
-        >
-          +
-        </button>
-      </div>
-      <div className={styles.row}>
-        <input
-          className={styles.textbox}
-          aria-label="Set increment amount"
-          value={incrementAmount}
-          onChange={(e) => setIncrementAmount(e.target.value)}
-        />
-        <button
-          className={styles.button}
-          onClick={() => dispatch(incrementByAmount(incrementValue))}
-        >
-          Add Amount
-        </button>
-        <button
-          className={styles.asyncButton}
-          onClick={() => dispatch(incrementAsync(incrementValue))}
-        >
-          Add Async
-        </button>
-        <button
-          className={styles.button}
-          onClick={() => dispatch(incrementIfOdd(incrementValue))}
-        >
-          Add If Odd
-        </button>
-      </div>
-    </div>
+    <nav>
+      <ul className="container">
+        <ul className="nav-menu">
+          <li>
+            <NavLink exact to="/" activeClassName="active">
+              Home
+            </NavLink>
+          </li>
+          <li>
+            <NavLink to="/login" activeClassName="active">
+              Login
+            </NavLink>
+          </li>
+          <li>
+            <NavLink to="/details" activeClassName="active">
+              Details
+            </NavLink>
+          </li>
+        </ul>
+
+        <li className="dropdown">
+          Menu
+          <ul className="user-menu">
+            <li>Name</li>
+            <li style={{ cursor: "pointer" }} onClick={logout}>
+              Logout
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </nav>
   );
 }

@@ -4,6 +4,8 @@ import { useHistory } from "react-router-dom";
 // custom hook
 import useLocalStorage from "../../hooks/localStorage.hook";
 
+import "./styles.scss";
+
 const Login = () => {
   const history = useHistory();
   const [userInfo, setUserInfo] = useLocalStorage("user", {});
@@ -28,40 +30,46 @@ const Login = () => {
   });
 
   return (
-    <section>
+    <section className="container">
       <h1>Login</h1>
 
       <form onSubmit={formik.handleSubmit}>
-        <label htmlFor="email">Email</label>
-        <input
-          type="email"
-          id="email"
-          name="email"
-          onChange={formik.handleChange}
-          value={userInfo.email !== "" ? userInfo.email : formik.values.email}
-        />
+        <div>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            onChange={formik.handleChange}
+            value={userInfo.email !== "" ? userInfo.email : formik.values.email}
+            placeholder="Email"
+          />
+        </div>
 
-        <label htmlFor="password">Password</label>
-        <input
-          type="password"
-          id="password"
-          name="password"
-          onChange={formik.handleChange}
-          value={
-            userInfo.password !== ""
-              ? userInfo.password
-              : formik.values.password
-          }
-        />
+        <div>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            onChange={formik.handleChange}
+            value={
+              userInfo.password !== ""
+                ? userInfo.password
+                : formik.values.password
+            }
+            placeholder="Password"
+          />
+        </div>
 
-        <label htmlFor="remember-me">Remember me</label>
-        <input
-          type="checkbox"
-          id="remember-me"
-          name="rememberMe"
-          onChange={formik.handleChange}
-          value={formik.values.rememberMe}
-        />
+        <div>
+          <input
+            type="checkbox"
+            id="remember-me"
+            name="rememberMe"
+            onChange={formik.handleChange}
+            value={formik.values.rememberMe}
+          />
+          <label htmlFor="remember-me">Remember me</label>
+        </div>
 
         <button type="submit">Submit</button>
       </form>
