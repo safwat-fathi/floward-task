@@ -4,14 +4,10 @@ import { useHistory, NavLink } from "react-router-dom";
 import useUserState from "../../hooks/user.hook";
 
 // import { useSelector, useDispatch } from "react-redux";
-// import {
-//   decrement,
-//   increment,
-//   incrementByAmount,
-//   incrementAsync,
-//   incrementIfOdd,
-//   selectCount,
-// } from "./navSlice";
+// import { } from "./navSlice";
+
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBars } from "@fortawesome/free-solid-svg-icons";
 
 import "./styles.scss";
 
@@ -31,32 +27,41 @@ export default function Nav() {
     <nav>
       <ul className="container">
         <ul className="nav-menu">
-          <li>
-            <NavLink exact to="/" activeClassName="active">
-              Home
-            </NavLink>
-          </li>
-          <li>
-            <NavLink to="/login" activeClassName="active">
-              Login
-            </NavLink>
-          </li>
-          <li>
-            <NavLink to="/details" activeClassName="active">
-              Details
-            </NavLink>
-          </li>
+          {!user && (
+            <li>
+              <NavLink to="/login" activeClassName="active">
+                Login
+              </NavLink>
+            </li>
+          )}
+          {user && (
+            <li>
+              <NavLink exact to="/" activeClassName="active">
+                Home
+              </NavLink>
+            </li>
+          )}
+          {user && (
+            <li>
+              <NavLink to="/details" activeClassName="active">
+                Details
+              </NavLink>
+            </li>
+          )}
+          <li></li>
         </ul>
 
-        <li className="dropdown">
-          Menu
-          <ul className="user-menu">
-            <li>Name</li>
-            <li style={{ cursor: "pointer" }} onClick={logout}>
-              Logout
-            </li>
-          </ul>
-        </li>
+        {user && (
+          <li className="dropdown">
+            <FontAwesomeIcon icon={faBars} />
+            <ul className="user-menu">
+              <li>{user.email}</li>
+              <li style={{ cursor: "pointer" }} onClick={logout}>
+                Logout
+              </li>
+            </ul>
+          </li>
+        )}
       </ul>
     </nav>
   );

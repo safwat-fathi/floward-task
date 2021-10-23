@@ -7,8 +7,9 @@ import Home from "./pages/Home";
 import Details from "./pages/Details";
 // components
 import Nav from "./features/nav";
+import ProtectedRoute from "./features/protectedRoute";
 
-import "./App.css";
+import "./App.scss";
 
 function App() {
   return (
@@ -18,9 +19,9 @@ function App() {
         {/* app routes */}
         <main>
           <Switch>
-            <Route exact path="/" component={Home} />
             <Route path="/login" component={Login} />
-            <Route path="/details" component={Details} />
+            <ProtectedRoute path="/details" component={Details} />
+            <ProtectedRoute exact path="/" component={Home} />
           </Switch>
         </main>
       </div>

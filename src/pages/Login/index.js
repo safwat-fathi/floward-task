@@ -17,8 +17,6 @@ const Login = () => {
       rememberMe: false,
     },
     onSubmit: (values) => {
-      console.log(values);
-
       // store user info in local storage
       if (values.rememberMe) {
         setUserInfo(values);
