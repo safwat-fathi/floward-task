@@ -20,7 +20,7 @@ function App() {
           <Switch>
             {/* app routes */}
             <Route path="/login" component={Login} />
-            <ProtectedRoute path="/details" component={Details} />
+            <ProtectedRoute path="/details/:code" component={Details} />
             <ProtectedRoute exact path="/" component={Home} />
           </Switch>
         </main>
