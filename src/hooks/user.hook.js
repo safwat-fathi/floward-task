@@ -5,7 +5,7 @@ const useUserState = () => {
   const [user, setUser] = useState(() => {
     const user = localStorage.getItem("user");
 
-    return user ? true : false;
+    return user ? user : false;
   });
 
   const setUserState = (value) => {

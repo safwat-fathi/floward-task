@@ -43,6 +43,7 @@ nav {
     align-items: center;
     transition: all 0.3s;
     cursor: default;
+    padding-left: 4rem;
 
     &:hover ul.user-menu {
       display: flex;

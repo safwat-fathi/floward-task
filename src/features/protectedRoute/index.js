@@ -1,16 +1,22 @@
 import React from "react";
 import { Redirect, Route } from "react-router-dom";
 
-import useUserState from "../../hooks/user.hook";
+// redux
+import { useSelector } from "react-redux";
+import { selectUser } from "../../features/auth/authSlice";
 
-const ProtectedRoute = ({ component, ...restOfProps }) => {
-  const [user] = useUserState();
+const ProtectedRoute = ({ component: Component, ...restOfProps }) => {
+  const userState = useSelector(selectUser);
 
   return (
     <Route
       {...restOfProps}
       render={(props) => {
-        return user ? <component {...props} /> : <Redirect to="/login" />;
+        return userState.isLoggedIn ? (
+          <Component {...props} />
+        ) : (
+          <Redirect to="/login" />
+        );
       }}
     />
   );

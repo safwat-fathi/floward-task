@@ -1,76 +1,116 @@
-import React, { useEffect } from "react";
-import { useFormik } from "formik";
+import React, { useEffect, useState } from "react";
+import { Formik, Form as FormikForm, Field } from "formik";
+import * as Yup from "yup";
 import { useHistory } from "react-router-dom";
+// redux
+import { useDispatch, useSelector } from "react-redux";
+import { login, selectUser } from "../../features/auth/authSlice";
 // custom hook
 import useLocalStorage from "../../hooks/localStorage.hook";
 
 import "./styles.scss";
 
 const Login = () => {
+  // user state from auth slice
+  const userState = useSelector(selectUser);
+  // remember user data
+  const [rememberMe, setRememberMe] = useState(false);
+
+  const dispatch = useDispatch();
   const history = useHistory();
+
+  // custom hook for storing user info in local storage
   const [userInfo, setUserInfo] = useLocalStorage("user", {});
 
-  const formik = useFormik({
-    initialValues: {
-      email: "",
-      password: "",
-      rememberMe: false,
-    },
-    onSubmit: (values) => {
-      // store user info in local storage
-      if (values.rememberMe) {
-        setUserInfo(values);
+  // Yup login schema
+  const LoginSchema = Yup.object().shape({
+    email: Yup.string().email("Email is invalid").required("Email is required"),
+    password: Yup.string()
+      .matches(
+        /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{6,}$/gm,
+        "Password must contain at least one lowercase letter, one uppercase letter, one number and at least 6 characters!"
+      )
+      .required("Password is required"),
+  });
+
+  useEffect(() => {
+    // store user info in local storage
+    if (userState.isLoggedIn) {
+      const { email, password } = userState;
+
+      if (rememberMe) {
+        setUserInfo({ email, password });
+      } else {
+        setUserInfo({});
       }
 
-      // navigate to home page
+      console.log(userInfo);
+      // navigate to home page on login success
       history.push("/");
-    },
-  });
+    }
+  }, [userState]);
 
   return (
     <section className="container">
       <h1>Login</h1>
 
-      <form onSubmit={formik.handleSubmit}>
-        <div>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            onChange={formik.handleChange}
-            value={userInfo.email !== "" ? userInfo.email : formik.values.email}
-            placeholder="Email"
-          />
-        </div>
+      <Formik
+        initialValues={{
+          email: userInfo ? userInfo.email : "",
+          password: userInfo ? userInfo.password : "",
+        }}
+        validationSchema={LoginSchema}
+        onSubmit={(values) => {
+          // store user info in local storage
+          if (rememberMe) {
+            setUserInfo(values);
+          }
 
-        <div>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            onChange={formik.handleChange}
-            value={
-              userInfo.password !== ""
-                ? userInfo.password
-                : formik.values.password
-            }
-            placeholder="Password"
-          />
-        </div>
+          dispatch(login({ ...values, isLoggedIn: true }));
+        }}
+      >
+        {({ errors }) => (
+          <FormikForm>
+            <div className="field">
+              <Field
+                type="text"
+                id="email"
+                name="email"
+                placeholder="Email"
+                className={errors.email && "error"}
+              />
+              {errors.email && (
+                <span className="errorMessage">{errors.email}</span>
+              )}
+            </div>
 
-        <div>
-          <input
-            type="checkbox"
-            id="remember-me"
-            name="rememberMe"
-            onChange={formik.handleChange}
-            value={formik.values.rememberMe}
-          />
-          <label htmlFor="remember-me">Remember me</label>
-        </div>
+            <div className="field">
+              <Field
+                type="password"
+                id="password"
+                name="password"
+                placeholder="Password"
+                className={errors.password && "error"}
+              />
+              {errors.password && (
+                <span className="errorMessage">{errors.password}</span>
+              )}
+            </div>
 
-        <button type="submit">Submit</button>
-      </form>
+            <div>
+              <input
+                type="checkbox"
+                id="remember-me"
+                value={rememberMe}
+                onChange={() => setRememberMe(!rememberMe)}
+              />
+              <label htmlFor="remember-me">Remember me</label>
+            </div>
+
+            <Field type="submit" value="Submit" />
+          </FormikForm>
+        )}
+      </Formik>
     </section>
   );
 };

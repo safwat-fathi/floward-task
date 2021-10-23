@@ -5,3 +5,25 @@ form {
   align-items: center;
   gap: 1rem 0;
 }
+
+.field {
+  display: flex;
+  flex-flow: column;
+  align-items: flex-start;
+
+  input {
+    margin-bottom: 0.5rem;
+  }
+}
+
+.error {
+  background-color: #f8d7da;
+  border-color: #f5c6cb;
+  color: #721c24;
+}
+.errorMessage {
+  width: 10rem;
+  color: #721c24;
+  font-size: 12px;
+  font-weight: 500;
+}

@@ -16,9 +16,9 @@ function App() {
     <Router>
       <Nav />
       <div className="App">
-        {/* app routes */}
         <main>
           <Switch>
+            {/* app routes */}
             <Route path="/login" component={Login} />
             <ProtectedRoute path="/details" component={Details} />
             <ProtectedRoute exact path="/" component={Home} />

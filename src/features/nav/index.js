@@ -1,10 +1,10 @@
-import React from "react";
-import { useHistory, NavLink } from "react-router-dom";
+import React, { useEffect } from "react";
+import { NavLink } from "react-router-dom";
+// redux
+import { useDispatch, useSelector } from "react-redux";
+import { logout, selectUser } from "../../features/auth/authSlice";
 
-import useUserState from "../../hooks/user.hook";
-
-// import { useSelector, useDispatch } from "react-redux";
-// import { } from "./navSlice";
+// import useUserState from "../../hooks/user.hook";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
@@ -12,36 +12,29 @@ import { faBars } from "@fortawesome/free-solid-svg-icons";
 import "./styles.scss";
 
 export default function Nav() {
-  const history = useHistory();
-  const [user, setUser] = useUserState();
+  const userState = useSelector(selectUser);
 
-  const logout = () => {
-    setUser(false);
-    // remove user info
-    localStorage.removeItem("user");
-    // redirect to login
-    history.push("/login");
-  };
+  const dispatch = useDispatch();
 
   return (
     <nav>
       <ul className="container">
         <ul className="nav-menu">
-          {!user && (
+          {!userState.isLoggedIn && (
             <li>
               <NavLink to="/login" activeClassName="active">
                 Login
               </NavLink>
             </li>
           )}
-          {user && (
+          {userState.isLoggedIn && (
             <li>
               <NavLink exact to="/" activeClassName="active">
                 Home
               </NavLink>
             </li>
           )}
-          {user && (
+          {userState.isLoggedIn && (
             <li>
               <NavLink to="/details" activeClassName="active">
                 Details
@@ -51,12 +44,17 @@ export default function Nav() {
           <li></li>
         </ul>
 
-        {user && (
+        {userState.isLoggedIn && (
           <li className="dropdown">
             <FontAwesomeIcon icon={faBars} />
             <ul className="user-menu">
-              <li>{user.email}</li>
-              <li style={{ cursor: "pointer" }} onClick={logout}>
+              <li>{userState.email}</li>
+              <li
+                style={{ cursor: "pointer" }}
+                onClick={() => {
+                  dispatch(logout());
+                }}
+              >
                 Logout
               </li>
             </ul>
