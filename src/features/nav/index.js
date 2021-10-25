@@ -4,8 +4,6 @@ import { NavLink } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logout, selectUser } from "../../features/auth/authSlice";
 
-// import useUserState from "../../hooks/user.hook";
-
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 
@@ -34,14 +32,13 @@ export default function Nav() {
               </NavLink>
             </li>
           )}
-          {userState.isLoggedIn && (
+          {/* {userState.isLoggedIn && (
             <li>
               <NavLink to="/details" activeClassName="active">
                 Details
               </NavLink>
             </li>
-          )}
-          <li></li>
+          )} */}
         </ul>
 
         {userState.isLoggedIn && (
